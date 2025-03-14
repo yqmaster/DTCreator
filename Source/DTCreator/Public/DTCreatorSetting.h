@@ -5,7 +5,6 @@
 #include "Engine/DeveloperSettings.h"
 #include "DTCreatorSetting.generated.h"
 
-
 UCLASS(Blueprintable, Abstract, EditInlineNew, CollapseCategories)
 class DTCREATOR_API UDTCreatorHelperBase : public UObject
 {
@@ -14,16 +13,17 @@ class DTCREATOR_API UDTCreatorHelperBase : public UObject
 public:
 	UFUNCTION(BlueprintNativeEvent)
 	void MakeDataTableRow(UDataTable* DataTable, UObject* FileObject);
-
-	virtual void MakeDataTableRow_Implementation(UDataTable* DataTable, UObject* FileObject) { }
+	virtual void MakeDataTableRow_Implementation(UDataTable* DataTable, UObject* FileObject) {}
 
 	UFUNCTION(BlueprintNativeEvent)
 	void PreFinishMakeDataTable(UDataTable* DataTable);
+	virtual void PreFinishMakeDataTable_Implementation(UDataTable* DataTable) {}
 
-	virtual void PreFinishMakeDataTable_Implementation(UDataTable* DataTable) { }
+	// 用于生成关闭的时候，至少要塞点数据进去，否则会报错
+	UFUNCTION(BlueprintNativeEvent)
+	void OnDisableMakeDataTable(UDataTable* DataTable);
+	virtual void OnDisableMakeDataTable_Implementation(UDataTable* DataTable) {}
 };
-
-
 
 USTRUCT(BlueprintType)
 struct DTCREATOR_API FDTCreatorSettingInfo

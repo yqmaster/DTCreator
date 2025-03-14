@@ -97,13 +97,16 @@ void UDTCreatorFunctionLibrary::CreateDataTables()
 
 			HelperObject->PreFinishMakeDataTable(DataTable);
 		}
+		else
+		{
+			HelperObject->OnDisableMakeDataTable(DataTable);
+		}
 
 		PackagesToSave.Add(DataTable->GetOutermost());
 	}
 	FEditorFileUtils::PromptForCheckoutAndSave(PackagesToSave, false, false, NULL, true, false);
 	UE_LOG(LogTemp, Log, TEXT("Finish create DataTables"));
 }
-
 
 void UDTCreatorFunctionLibrary::AddDataTableRowByUserDefinedStruct(UDataTable* const DataTable, const FName& RowName, const FTableRowBase& RowData)
 {
@@ -148,7 +151,7 @@ DEFINE_FUNCTION(UDTCreatorFunctionLibrary::execAddDataTableRowByUserDefinedStruc
 		if (bMatchesTableType || (RowType->IsChildOf(TableType) && FStructUtils::TheSameLayout(RowType, TableType)))
 		{
 			P_NATIVE_BEGIN;
-			AddDataTableRowByUserDefinedStruct(DataTable, RowName, *RowData);
+				AddDataTableRowByUserDefinedStruct(DataTable, RowName, *RowData);
 			P_NATIVE_END;
 		}
 		else
@@ -206,6 +209,11 @@ TArray<UObject*> UDTCreatorFunctionLibrary::FindObjectReferencesByClass(UObject*
 	}
 
 	return ReturnObjects;
+}
+
+void UDTCreatorFunctionLibrary::GetDTCreatorMutableDefaultObject(TSubclassOf<UObject> Class, UObject*& DefaultObject)
+{
+	DefaultObject = (Class == nullptr) ? nullptr : GetMutableDefault<UObject>(Class);
 }
 
 bool UDTCreatorFunctionLibrary::CanCreateAsset(const FString& AssetName, const FString& PackageName, const FText& OperationText)

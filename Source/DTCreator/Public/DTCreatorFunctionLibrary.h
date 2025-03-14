@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (ObjectClass = "/Script/Engine.Object", DeterminesOutputType = "ObjectClass"))
 	static TArray<UObject*> FindObjectReferencesByClass(UObject* Object, TSubclassOf<UObject> ObjectClass);
 
+	// 因为生命周期过早所以使用这个函数来替代 GetMutableDefaultObject
+	UFUNCTION(BlueprintPure, meta = (DeterminesOutputType = "Class", DynamicOutputParam = "DefaultObject"))
+	static void GetDTCreatorMutableDefaultObject(TSubclassOf<UObject> Class, UObject*& DefaultObject);
 public:
 	static bool CanCreateAsset(const FString& AssetName, const FString& PackageName, const FText& OperationText);
 	static UObject* CreateAssetByFactory(const FString& AssetName, const FString& PackagePath, UFactory* Factory);
